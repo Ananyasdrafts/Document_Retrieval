@@ -1,38 +1,34 @@
-import numpy as np
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
-from db import SessionLocal, Document
 
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+from db import get_documents
 
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 
 def perform_search(text, top_k, threshold):
     """
-    Performing search by fetching documents from the database,
-    computing cosine similarity with the query embedding,
-    and returning the top_k results above the threshold.
+    Performing a search to find top_k most similar documents to the query text.
     """
+    query_embedding = model.encode(text)
     
-    query_embedding = model.encode([text])
+   
+    documents = get_documents()  
+
+    if not documents:
+        return []
 
     
-    db_session = SessionLocal()
-    documents = db_session.query(Document).all()
-
+    doc_ids, doc_texts, doc_embeddings = zip(*documents)
+    doc_embeddings = np.array(doc_embeddings)
     
-    document_texts = [doc.document_text for doc in documents]
-    document_embeddings = np.array([np.array(doc.document_embedding) for doc in documents])
+    
+    similarities = cosine_similarity([query_embedding], doc_embeddings)[0]
+    
+    # Filtering and sorting documents by similarity
+    filtered_docs = [(doc_ids[i], doc_texts[i], similarities[i]) for i in range(len(similarities)) if similarities[i] >= threshold]
+    sorted_docs = sorted(filtered_docs, key=lambda x: x[2], reverse=True)
+    
+    
+    return sorted_docs[:top_k]
 
-    # cosine similarity between the query embedding and document embeddings
-    similarities = cosine_similarity(query_embedding, document_embeddings)[0]
-
-    # Filtering and sorting results based on threshold and similarity scores
-    filtered_results = [
-        (doc_text, similarity) for doc_text, similarity in zip(document_texts, similarities)
-        if similarity >= threshold
-    ]
-    filtered_results.sort(key=lambda x: x[1], reverse=True)
-    top_results = filtered_results[:top_k]
-
-    db_session.close()
-    return [{"document_text": doc_text, "similarity": sim} for doc_text, sim in top_results]
