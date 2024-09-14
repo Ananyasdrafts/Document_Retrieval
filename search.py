@@ -19,6 +19,7 @@ def perform_search(text, top_k, threshold):
     db_session = SessionLocal()
     documents = db_session.query(Document).all()
 
+    
     document_texts = [doc.document_text for doc in documents]
     document_embeddings = np.array([np.array(doc.document_embedding) for doc in documents])
 

@@ -17,7 +17,7 @@ class Document(Base):
     __tablename__ = 'documents'
     doc_id = Column(Integer, primary_key=True, index=True)
     document_text = Column(String)
-    document_embedding = Column(ARRAY(Float))  # Store embedding as an array of floats
+    document_embedding = Column(ARRAY(Float))  # storing embedding as an array of floats
 
-# Create tables
+
 Base.metadata.create_all(bind=engine)
