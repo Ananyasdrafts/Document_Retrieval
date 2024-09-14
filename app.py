@@ -1,16 +1,14 @@
 from flask import Flask, jsonify, request
 import time
-from db import get_user, create_user, update_user_frequency
+import threading
+from db import SessionLocal, User
 from search import perform_search
-from caching import cache_response, get_cached_response
-from scraping import start_scraping_thread
+from caching import cache_search_results, get_cached_results
+from scraping import scrape_rss_feed
 import logging
 
 app = Flask(__name__)
-
-# Set up logging
-logging.basicConfig(filename='logs/app.log', level=logging.INFO, 
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO)
 
 @app.route('/health', methods=['GET'])
 def health_check():
@@ -24,29 +22,38 @@ def search():
     top_k = request.json.get('top_k', 5)
     threshold = request.json.get('threshold', 0.5)
     
-    # Handle user frequency and rate limiting
-    user = get_user(user_id)
+    # Check user frequency and apply rate limiting
+    db_session = SessionLocal()
+    user = db_session.query(User).filter_by(user_id=user_id).first()
+    
     if user:
         if user.frequency >= 5:
             return jsonify({"error": "Too many requests"}), 429
-        update_user_frequency(user)
+        user.frequency += 1
     else:
-        create_user(user_id)
+        user = User(user_id=user_id, frequency=1)
+        db_session.add(user)
     
-    # Check cache for search result
+    db_session.commit()
+    db_session.close()
+
+    # Check cache
     cache_key = f"search:{text}:{top_k}:{threshold}"
-    cached_response = get_cached_response(cache_key)
+    cached_response = get_cached_results(cache_key)
     
     if cached_response:
         response = jsonify({"data": cached_response})
     else:
         response_data = perform_search(text, top_k, threshold)
-        cache_response(cache_key, response_data)
+        cache_search_results(cache_key, response_data)
         response = jsonify({"data": response_data})
     
     inference_time = time.time() - start_time
-    logging.info(f"Request completed in {inference_time} seconds for user {user_id}")
+    app.logger.info(f"Request time: {inference_time} seconds")
     return response
+
+def start_scraping_thread():
+    threading.Thread(target=scrape_rss_feed, daemon=True).start()
 
 if __name__ == "__main__":
     start_scraping_thread()
