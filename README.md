@@ -22,6 +22,22 @@ The goal is to build a backend for document retrieval that serves as a context g
   - `/search`: Retrieves the top search results for a given query.
 - **Dockerized**: The application is Dockerized for easy deployment.
 
+## Repository Structure
+
+```plaintext
+document-retrieval-system/
+│
+├── app.py                  # Main Flask application
+├── db.py                   # Database configuration and models (PostgreSQL)
+├── search.py               # Search logic using Sentence-BERT
+├── scraping.py             # Background scraping logic (RSS feeds)
+├── caching.py              # Redis caching logic
+├── Dockerfile              # Docker configuration file
+├── requirements.txt        # Python dependencies
+├── tests/                  # Unit tests for the application
+│   └── test_app.py         # Sample tests for the app
+└── README.md               # Project documentation
+
 ## Requirements
 
 - **Programming Language**: Python (Flask preferred)
