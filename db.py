@@ -1,10 +1,9 @@
 from sqlalchemy import create_engine, Column, Integer, Float, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
-DATABASE_URL = "postgresql://ananya:mde6133#K@localhost/doc_retrieval"
+DATABASE_URL = "postgresql://postgres:mde6133#K@localhost/doc_retrieval"
 
 
 engine = create_engine(DATABASE_URL)
@@ -30,4 +29,3 @@ def init_db():
 
 if __name__ == "__main__":
     init_db()
-
