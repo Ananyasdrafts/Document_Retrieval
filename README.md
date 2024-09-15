@@ -15,6 +15,20 @@ Welcome to the Document Retrieval System! This project provides an efficient way
 4. **Background Scraping**: 
    - Periodically scrape news articles from RSS feeds to keep the document store updated.
 
+## Tech Stack
+- **Flask**: I chose Flask for its simplicity and flexibility. It's lightweight, which makes it easy to build and manage the web application. Its minimalistic nature means I can integrate it smoothly with other components, and it lets me focus on getting the core functionality right without being bogged down by unnecessary complexities.
+
+- **PostgreSQL**: I went with PostgreSQL for its robustness and reliability. It handles complex queries and maintains data integrity, which is crucial for managing the documents. PostgreSQL’s support for the ARRAY type is especially handy for storing Sentence-BERT embeddings efficiently.
+
+- **Redis**: Redis was an obvious choice for caching. Its in-memory data store significantly boosts performance by reducing the load on PostgreSQL and speeding up the retrieval of frequently accessed documents. It’s great for handling high traffic and ensuring that the search results are delivered quickly.
+
+- **Sentence-BERT**: Sentence-BERT is fantastic for generating semantic embeddings. It allows for a deeper understanding of the textual content, which means the document retrieval process is much more accurate. I chose it because it really enhances the relevance of search results by capturing the semantic meaning of the text.
+
+## Why This Tech Stack?
+When picking the technologies for this project, I focused on balancing performance, scalability, and ease of use. Flask’s minimalism fits perfectly with the need for a straightforward web app. PostgreSQL’s capabilities are well-suited for the complex queries and large datasets involved. Redis helps keep things fast and responsive, and Sentence-BERT ensures that the search results are as relevant as possible. Each component was chosen to make sure the system performs well and meets the demands of modern chat applications effectively.
+
+
+
 ## Logging and Performance Monitoring
 
 - **Inference Time**: Logs the time taken to complete each inference request.
@@ -24,6 +38,9 @@ Welcome to the Document Retrieval System! This project provides an efficient way
 
 - **BM25 Re-Ranking**: Enhances document ranking by combining Sentence-BERT embeddings with BM25 scoring.
 
+## Fine-Tuning Sentence-BERT
+Improves the quality of document embeddings by training Sentence-BERT on a specific domain or task, allowing it to better capture nuanced relationships between documents and queries for more relevant search results. Fine tuning script in `fine_tune.py`.
+
 ## Repository Structure
 
 - `app.py`: Main Flask application
@@ -32,6 +49,7 @@ Welcome to the Document Retrieval System! This project provides an efficient way
 - `scraping.py`: Background scraping logic (RSS feeds)
 - `caching.py`: Redis caching logic
 - `Dockerfile`: Docker configuration file
+- `fine_tune.py`: Script for fine-tuning Sentence-BERT
 - `requirements.txt`: Python dependencies
 - `tests/`: Unit tests for the application
   - `test_app.py`: Sample unit tests for the Flask application
