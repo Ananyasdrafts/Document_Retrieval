@@ -9,7 +9,8 @@ import nltk
 nltk.download('punkt')
 
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-
+#if you want to use the fine-tuned model comment out the above line and use the following line of code instead
+#model = SentenceTransformer(r'./fine_tuned_model_postgresql)
 
 def perform_search(text, top_k=5, threshold=0.5):
     
