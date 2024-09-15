@@ -1,45 +1,33 @@
-import time
-import feedparser
-from db import SessionLocal, Document
-from sentence_transformers import SentenceTransformer
+from sqlalchemy import create_engine, Column, Integer, Float, Text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects.postgresql import ARRAY
 
 
-model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+DATABASE_URL = "postgresql://ananya:mde6133#K@localhost/doc_retrieval"
 
-def scrape_rss_feed():
-    feed_urls = [
-        'http://rss.cnn.com/rss/cnn_topstories.rss', 
-        'http://feeds.bbci.co.uk/news/world/rss.xml',
-        'https://www.aljazeera.com/xml/rss/all.xml',
-        'http://feeds.reuters.com/reuters/topNews',
-        'http://rss.cnn.com/rss/cnn_world.rss',
-        'http://feeds.bbci.co.uk/news/technology/rss.xml',
-        'https://www.aljazeera.com/xml/rss/middleeast.xml',
-        'http://feeds.reuters.com/reuters/businessNews'
-    ]
+
+engine = create_engine(DATABASE_URL)
+
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+Base = declarative_base()
+
+
+class Document(Base):
+    __tablename__ = "documents"
     
-    while True:
-        for url in feed_urls:
-            feed = feedparser.parse(url)
-            
-            for entry in feed.entries:
-                try:
-                    
-                    article_text = f"{entry.title}\n{entry.description}"
-                    
-                    
-                    embedding = model.encode(article_text).tolist()
+    id = Column(Integer, primary_key=True, index=True)
+    document_text = Column(Text, nullable=False)
+    document_embedding = Column(ARRAY(Float), nullable=False)  
 
-                    
-                    db_session = SessionLocal()
-                    new_document = Document(
-                        document_text=article_text,
-                        document_embedding=embedding
-                    )
-                    db_session.add(new_document)
-                    db_session.commit()
-                    db_session.close()
-                except Exception as e:
-                    print(f"Error processing entry: {e}")
 
-        time.sleep(3600)  
+def init_db():
+    Base.metadata.create_all(bind=engine)
+
+
+if __name__ == "__main__":
+    init_db()
+
