@@ -2,23 +2,27 @@
 
 # Document Retrieval System for Chat Applications
 
-Welcome to the Document Retrieval System! This project enables efficient retrieval of documents based on textual queries, designed for enhancing chat applications. Using a combination of Flask, PostgreSQL, Redis, and Sentence-BERT, it ensures quick and relevant document retrieval.
+Welcome to the Document Retrieval System! This project provides an efficient way to retrieve documents based on textual queries, designed to enhance chat applications. Leveraging Flask, PostgreSQL, Redis, and Sentence-BERT, it ensures fast and relevant document retrieval.
 
-The document retrieval system operates through a well-defined pipeline, which includes:
+## Features
 
-1. **Document ingestion**: Store documents in a PostgreSQL database for easy access and management.
-2. **Query-based search**: Retrieve and rank documents using Sentence-BERT embeddings based on query similarity.
-3. **Caching for performance**: Cache frequently accessed results using Redis to improve response times.
-4. **Background scraping**: Periodically scrape and update the document store with news articles from RSS feeds.
+1. **Document Ingestion**: 
+   - Store and manage documents in a PostgreSQL database.
+2. **Query-Based Search**: 
+   - Retrieve and rank documents using Sentence-BERT embeddings for query similarity.
+3. **Caching for Performance**: 
+   - Utilize Redis to cache frequently accessed search results, reducing response times.
+4. **Background Scraping**: 
+   - Periodically scrape news articles from RSS feeds to keep the document store updated.
 
 ## Logging and Performance Monitoring
 
-- **Inference Time**: Each request will log the time taken for the inference to complete.
-- **API Logging**: Logs are generated for each API call, including error handling for rate limiting.
+- **Inference Time**: Logs the time taken to complete each inference request.
+- **API Logging**: Records logs for each API call and handles errors, including rate limiting.
 
-## Bonus Features
+## Re-Ranking Algorithm
 
-- **Re-ranking Algorithm**: BM25 re-ranking is implemented for improving document ranking.
+- **BM25 Re-Ranking**: Enhances document ranking by combining Sentence-BERT embeddings with BM25 scoring.
 
 ## Repository Structure
 
@@ -30,27 +34,50 @@ The document retrieval system operates through a well-defined pipeline, which in
 - `Dockerfile`: Docker configuration file
 - `requirements.txt`: Python dependencies
 - `tests/`: Unit tests for the application
-  - `test_app.py`: Sample tests for the app
+  - `test_app.py`: Sample unit tests for the Flask application
 
-### Prerequisites
+## Prerequisites
 
 - Python 3.x
-- Required libraries in `requirements.txt`
+- PostgreSQL
+- Redis
+- Required Python libraries (listed in `requirements.txt`)
 
 ## Setup Instructions
 
-1. Clone the repository and install the required dependencies.
-2. Set up PostgreSQL and Redis by configuring credentials in `db.py` and `caching.py`.
-3. Start the Flask application and the background scraper.
+1. **Clone the Repository**: 
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+
+2. **Install Dependencies:**: 
+   ```bash
+   pip install -r requirements.txt
+
+3. **Configure PostgreSQL and Redis:**
+   - Update database credentials in `db.py`.
+   - Update Redis connection settings in `caching.py`.
+
+4. **Start the Flask Application:**: 
+   ```bash
+   python app.py
+5. **Run the Background Scraper:**
+    The background scraping is automatically started with the Flask application. Ensure the URLs in 
+    `scraping.py` are set to your sources.
+
 
 ### Usage
 
-- **Start the server**: Once the setup is complete, interact with the system via the API for text queries.
+- **Start the server**: Once the setup is complete, interact with the system via the API for text queries. Use the /search endpoint to query documents.
 - **Run Background Scraping**: Keep the scraper running to ensure the document store remains updated with fresh content.
 
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See the LICENSE file for more details.
+
+## Contributions
+
+Contributors: recruitments@trademarkia.com
 
 ## Author
 
