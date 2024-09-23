@@ -1,5 +1,3 @@
-# 21BCE3537_ML
-
 # Document Retrieval System for Chat Applications
 
 Welcome to the Document Retrieval System! This project provides an efficient way to retrieve documents based on textual queries, designed to enhance chat applications. Leveraging Flask, PostgreSQL, Redis, and Sentence-BERT, it ensures fast and relevant document retrieval.
@@ -23,11 +21,6 @@ Welcome to the Document Retrieval System! This project provides an efficient way
 - **Redis**: Redis was an obvious choice for caching. Its in-memory data store significantly boosts performance by reducing the load on PostgreSQL and speeding up the retrieval of frequently accessed documents. It’s great for handling high traffic and ensuring that the search results are delivered quickly.
 
 - **Sentence-BERT**: Sentence-BERT is fantastic for generating semantic embeddings. It allows for a deeper understanding of the textual content, which means the document retrieval process is much more accurate. I chose it because it really enhances the relevance of search results by capturing the semantic meaning of the text.
-
-## Why This Tech Stack?
-When picking the technologies for this project, I focused on balancing performance, scalability, and ease of use. Flask’s minimalism fits perfectly with the need for a straightforward web app. PostgreSQL’s capabilities are well-suited for the complex queries and large datasets involved. Redis helps keep things fast and responsive, and Sentence-BERT ensures that the search results are as relevant as possible. Each component was chosen to make sure the system performs well and meets the demands of modern chat applications effectively.
-
-
 
 ## Logging and Performance Monitoring
 
@@ -93,10 +86,12 @@ Improves the quality of document embeddings by training Sentence-BERT on a speci
 
 This project is licensed under the GNU General Public License v3.0. See the LICENSE file for more details.
 
-## Contributions
+## Contributing
+
+We welcome contributions to enhance the functionality and features of this app. To contribute, please fork the repository, create a new branch, make your changes, and submit a pull request.
 
 Contributors: recruitments@trademarkia.com
 
-## Author
+## Contact
+For any questions or suggestions, please open an issue in this repository or contact the project maintainer at ananyag1019@gmail.com.
 
-Ananya Gupta - 21BCE3537
