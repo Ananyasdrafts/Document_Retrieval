@@ -90,7 +90,6 @@ This project is licensed under the GNU General Public License v3.0. See the LICE
 
 We welcome contributions to enhance the functionality and features of this app. To contribute, please fork the repository, create a new branch, make your changes, and submit a pull request.
 
-Contributors: recruitments@trademarkia.com
 
 ## Contact
 For any questions or suggestions, please open an issue in this repository or contact the project maintainer at ananyag1019@gmail.com.
